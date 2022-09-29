@@ -1,24 +1,46 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h5>Nama: </h5>
-<b>{{nama}}</b>
+<head>
+    <style>
+        table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
-<table>
-    <tr>
-    <th>Nama Barang</th>
-    <th>Harga Barang</th>
-    <th>Deskripsi</th>
-    </tr>
-{% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-{% for barang in list_barang %}
-    <tr>
-        <td>{{barang.nama_barang}}</td>
-        <td>{{barang.harga_barang}}</td>
-        <td>{{barang.deskripsi}}</td>
-    </tr>
-{% endfor %}
-</table>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-<button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+<body>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">{{nama}}</a>
+          <button class="btn btn-light me-2" type="button" style="background-color:rgb(255, 255, 255)"><a href="{% url 'wishlist:logout' %}" style = "text-decoration : none; color: black">Logout</a></button>
+        </div>
+      </nav>
+    
+      <p>&nbsp;</p>
+    <h5 style="text-align: center; font: arial;">Wishlist</h5>
+    <table class="table table-light table-striped table-hover table-bordered">
+        <tr>
+            <th>Nama Barang</th>
+            <th>Harga Barang</th>
+            <th>Deskripsi</th>
+        </tr>
+        {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+        {% for barang in list_barang %}
+        <tr>
+            <td>{{barang.nama_barang}}</td>
+            <td>{{barang.harga_barang}}</td>
+            <td>{{barang.deskripsi}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h5 style="font-size : 75%">Sesi terakhir login: {{ last_login }}</h5>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+        crossorigin="anonymous"></script>
+</body>
 {% endblock content %}
