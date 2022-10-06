@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+    <style>
+        table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        form {
+            margin: auto;
+            width: 75%;
+            padding: 1em;
+            border: 2px solid rgb(87, 73, 73);
+            border-radius: 1em;
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript">
+        $.ajax({
+            url: '../json/',
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var row = $('<tr><td>' + data[i].fields.nama_barang + '</td><td>' + data[i].fields.harga_barang + '</td><td>' +
+                        data[i].fields.deskripsi + '</td></tr>');
+                    $('#Table').append(row);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+        $(document).ready(function(){
+            $("#submit_button").click(function () {
+                var nama_barang = $('#id_barang').val();
+                var harga_barang = $('#id_harga').val();
+                var description= $('#id_description').val();
+                var csrfmiddlewaretoken = $('input[name=csrfmiddlewaretoken]').val();
+
+                $.post('./submit', {
+                    nama_barang,
+                    harga_barang,
+                    description,
+                    csrfmiddlewaretoken,
+                }, function (data, status) {
+                    document.getElementById("add_wishlist").reset();
+                    var row = $('<tr><td>' + nama_barang + '</td><td>' + harga_barang + '</td><td>' +
+                    description + '</td></tr>');
+                    $('#Table').append(row);
+                });
+            });
+        });
+
+    </script>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">{{nama}}</a>
+            <button class="btn btn-light me-2" type="button" style="background-color:rgb(255, 255, 255)"><a
+                    href="{% url 'wishlist:logout' %}" style="text-decoration : none; color: black">Logout</a></button>
+        </div>
+    </nav>
+
+    <p>&nbsp;</p>
+    <h5 style="text-align: center; font: arial;">Wishlist</h5>
+    <table class="table table-light table-striped table-hover table-bordered" id="Table">
+        <tr>
+            <th>Nama Barang</th>
+            <th>Harga Barang</th>
+            <th>Deskripsi</th>
+        </tr>
+        {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+    </table>
+    <h5 style="font-size : 75%">Sesi terakhir login: {{ last_login }}</h5>
+
+    <!-- <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center"> -->
+    <form method="POST" class="form-floating" id="add_wishlist">
+        {% csrf_token %}
+        <div class="row">
+            <h1 style="text-align:center;">Tambah Wishlist</h1>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" name="nama_barang" maxlength="255" required="" id="id_barang" class="form-control"
+                placeholder="Insert Nama Barang Here">
+            <label class="form-lable" for="id_title">Nama Barang</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" name="harga_barang" required="" id="id_harga" class="form-control"
+                placeholder="Insert Price Here">
+            <label class="form-lable" for="id_description">Harga Barang</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" name="description" required="" id="id_description" class="form-control"
+                placeholder="Inser Description Here">
+            <label class="form-lable" for="id_description">Description</label>
+        </div>
+        <div class="row d-flex justify-content-center text-center">
+            <div class="col justify-content-center align-items-center">
+                <input id = "submit_button" type="submit" name="submit" value="Tambah" class="btn btn-primary">
+            </div>
+        </div>
+    </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+        crossorigin="anonymous"></script>
+</body>
+{% endblock content %}
